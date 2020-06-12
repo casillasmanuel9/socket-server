@@ -33,10 +33,13 @@ export default class Server {
 
       //Configurar Usuario
       sokect.configurarUsuario(cliente, this.io);
+
+      // Obtener usuarios Activos
+      sokect.obtenerUsuarios(cliente,this.io);
       
       console.log(cliente.id);
       sokect.mensaje(cliente, this.io);
-      sokect.desconectar(cliente);
+      sokect.desconectar(cliente, this.io);
     });
   }
 
