@@ -2,8 +2,30 @@ import { usuariosConectados } from './../sockets/sockets';
 import { Socket } from 'socket.io';
 import { Router, Request, Response } from "express";
 import Server from "../classes/server";
+import { GraficaDate } from '../classes/grafica';
 
 const router = Router();
+
+const grafica = new GraficaDate();
+
+router.get("/grafica", (req: Request, res: Response) => {
+  res.json(grafica.getDataGrafica());
+});
+
+router.post("/grafica", (req: Request, res: Response) => {
+  const mes = req.body.mes;
+  const unidades = Number(req.body.unidades);
+
+  console.log(mes, unidades);
+
+  grafica.incrementar(mes, unidades); 
+
+
+  const server = Server.instance;
+  server.io.emit("cambios-grafica", grafica.getDataGrafica());
+
+  res.json( grafica.getDataGrafica() );
+});
 
 router.get("/mensajes", (req: Request, res: Response) => {
   res.json({
