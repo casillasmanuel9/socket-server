@@ -31,6 +31,9 @@ export default class Server {
       //Conectar Cliente
       sokect.conectarCliente(cliente);
 
+      // Configuracion de mapas
+      sokect.mapaSockets(cliente, this.io);
+
       //Configurar Usuario
       sokect.configurarUsuario(cliente, this.io);
 

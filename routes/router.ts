@@ -1,4 +1,5 @@
-import { usuariosConectados } from './../sockets/sockets';
+import { Mapa } from './../classes/mapa';
+import { usuariosConectados, mapa } from './../sockets/sockets';
 import { Router, Request, Response } from "express";
 import Server from "../classes/server";
 import { GraficaDate } from '../classes/grafica';
@@ -8,6 +9,11 @@ const router = Router();
 
 const grafica = new GraficaDate();
 const encuesta = new EncuestaData();
+
+
+router.get('/mapa', (req: Request, res: Response) => {
+  res.json(mapa.getMarkadores());
+})
 
 router.get("/grafica", (req: Request, res: Response) => {
   res.json(grafica.getDataGrafica());
