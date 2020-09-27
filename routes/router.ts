@@ -1,12 +1,13 @@
 import { usuariosConectados } from './../sockets/sockets';
-import { Socket } from 'socket.io';
 import { Router, Request, Response } from "express";
 import Server from "../classes/server";
 import { GraficaDate } from '../classes/grafica';
+import { EncuestaData } from '../classes/encuesta';
 
 const router = Router();
 
 const grafica = new GraficaDate();
+const encuesta = new EncuestaData();
 
 router.get("/grafica", (req: Request, res: Response) => {
   res.json(grafica.getDataGrafica());
@@ -25,6 +26,25 @@ router.post("/grafica", (req: Request, res: Response) => {
   server.io.emit("cambios-grafica", grafica.getDataGrafica());
 
   res.json( grafica.getDataGrafica() );
+});
+
+router.get('/encuesta', (req: Request, res: Response) => {
+  res.json(encuesta.getDataEncuesta());
+});
+
+router.post('/encuesta', (req: Request, res: Response) => {
+  const opcion = req.body.opcion;
+  const unidades = Number(req.body.unidades);
+
+  console.log(opcion, unidades);
+
+  encuesta.incrementar(opcion, unidades);
+
+  const server = Server.instance;
+  server.io.emit('cambios-encuesta', encuesta.getDataEncuesta());
+
+  res.json(encuesta.getDataEncuesta());
+
 });
 
 router.get("/mensajes", (req: Request, res: Response) => {
